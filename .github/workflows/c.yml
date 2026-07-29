@@ -1,0 +1,10 @@
+name: test
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: print
+        shell: bash
+        run: echo "${{ ${{ github.event.repository.owner.type }}"
+    
