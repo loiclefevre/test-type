@@ -36,7 +36,8 @@ jobs:
           EOF
       - name: Configure miniconda
         run: |
-          /home/ubuntu/miniconda/bin/conda config --remove channels https://repo.anaconda.com/pkgs/
+          /home/ubuntu/miniconda/bin/conda config --remove channels https://repo.anaconda.com/pkgs/main
+          /home/ubuntu/miniconda/bin/conda config --remove channels https://repo.anaconda.com/pkgs/r
 
 #      - name: Pre-install miniconda
 #        run: |
