@@ -60,6 +60,7 @@ jobs:
           ssl_verify: false
         env:
           CONDA: /home/ubuntu/miniconda
+          CONDA_SSL_VERIFY: /usr/local/share/ca-certificates/ssl-forward-proxy-ca.crt
 #          CONDA_PLUGINS_AUTO_ACCEPT_TOS: "yes"
 #          CONDA_EXE: /home/ubuntu/miniconda/bin/conda
 #          CONDA_PREFIX: /home/ubuntu/miniconda
