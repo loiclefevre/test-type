@@ -23,6 +23,9 @@ jobs:
             - proj=9.6.*
             - pip=26.*
           EOF
+      - name: Investigate environment
+        run: |
+          echo $CI
       - name: Setup Miniforge
         # Pinned to v4.0.1
         uses: conda-incubator/setup-miniconda@8ee1f361103df19b6f8c8655fd3967a8ecb162d5
