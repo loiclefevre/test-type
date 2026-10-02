@@ -35,6 +35,8 @@ jobs:
           activate-environment: geodjango
           environment-file: "./geolibs-gil.yml"
           channel-priority: strict
+        env:
+          CONDA: /usr/share/miniconda
 
       - name: print
         shell: bash
