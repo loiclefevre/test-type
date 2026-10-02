@@ -57,14 +57,15 @@ jobs:
           activate-environment: geodjango
           environment-file: "./geolibs-gil.yml"
           channel-priority: strict
+          ssl_verify: false
         env:
           CONDA: /home/ubuntu/miniconda
-          CONDA_PLUGINS_AUTO_ACCEPT_TOS: "yes"
-          CONDA_EXE: /home/ubuntu/miniconda/bin/conda
-          CONDA_PREFIX: /home/ubuntu/miniconda
-          CONDA_PROMPT_MODIFIER: ""
-          CONDA_PYTHON_EXE: /home/ubuntu/miniconda/bin/python
-          CONDA_SHLVL: 1          
+#          CONDA_PLUGINS_AUTO_ACCEPT_TOS: "yes"
+#          CONDA_EXE: /home/ubuntu/miniconda/bin/conda
+#          CONDA_PREFIX: /home/ubuntu/miniconda
+#          CONDA_PROMPT_MODIFIER: ""
+#          CONDA_PYTHON_EXE: /home/ubuntu/miniconda/bin/python
+#          CONDA_SHLVL: 1          
           
       - name: print
         shell: bash
