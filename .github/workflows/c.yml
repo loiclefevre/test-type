@@ -59,7 +59,7 @@ jobs:
           channel-priority: strict
         env:
           CONDA: /home/ubuntu/miniconda
-          CONDA_SSL_VERIFY: false
+#          CONDA_SSL_VERIFY: false
           REQUESTS_CA_BUNDLE: ""
           CURL_CA_BUNDLE: ""
 #          CONDA_PLUGINS_AUTO_ACCEPT_TOS: "yes"
