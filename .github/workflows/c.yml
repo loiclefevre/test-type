@@ -57,7 +57,6 @@ jobs:
           activate-environment: geodjango
           environment-file: "./geolibs-gil.yml"
           channel-priority: strict
-          ssl_verify: false
         env:
           CONDA: /home/ubuntu/miniconda
           CONDA_SSL_VERIFY: /usr/local/share/ca-certificates/ssl-forward-proxy-ca.crt
