@@ -31,8 +31,8 @@ jobs:
           && chmod +x miniconda.sh \
           && ./miniconda.sh -b -p /home/ubuntu/miniconda \
           && rm miniconda.sh \
-          && CONDA=/home/ubuntu/miniconda \
-          && ln -s $CONDA/bin/conda /usr/bin/conda
+          && CONDA=/home/ubuntu/miniconda
+# && ln -s $CONDA/bin/conda /usr/bin/conda
       
       - name: Investigate environment
         run: |
