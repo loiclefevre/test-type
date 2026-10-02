@@ -59,7 +59,7 @@ jobs:
           channel-priority: strict
         env:
           CONDA: /home/ubuntu/miniconda
-          CONDA_PLUGINS_AUTO_ACCEPT_TOS: yes
+          CONDA_PLUGINS_AUTO_ACCEPT_TOS: "yes"
           
       - name: print
         shell: bash
