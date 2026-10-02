@@ -58,10 +58,9 @@ jobs:
           environment-file: "./geolibs-gil.yml"
           channel-priority: strict
         env:
-          CONDA: /home/ubuntu/miniconda
+          #CONDA: /home/ubuntu/miniconda
           CONDA_SSL_VERIFY: false
-#          REQUESTS_CA_BUNDLE: ""
-          CURL_CA_BUNDLE: ""
+          REQUESTS_CA_BUNDLE: ""
 #          CONDA_PLUGINS_AUTO_ACCEPT_TOS: "yes"
 #          CONDA_EXE: /home/ubuntu/miniconda/bin/conda
 #          CONDA_PREFIX: /home/ubuntu/miniconda
