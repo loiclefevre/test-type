@@ -22,10 +22,6 @@ jobs:
             - geos=3.14.*
             - proj=9.6.*
             - pip=26.*
-#            - pip:
-#                - -r ../../../../tests/requirements/py3.txt
-#                - -r ../../../../tests/requirements/oracle.txt
-#                - -e ../../../../
           EOF
 
       - name: print
