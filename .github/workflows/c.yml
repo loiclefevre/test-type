@@ -34,10 +34,6 @@ jobs:
             - proj=9.6.*
             - pip=26.*
           EOF
-      - name: Configure miniconda
-        run: |
-          /home/ubuntu/miniconda/bin/conda config --remove channels https://repo.anaconda.com/pkgs/main
-          /home/ubuntu/miniconda/bin/conda config --remove channels https://repo.anaconda.com/pkgs/r
 
 #      - name: Pre-install miniconda
 #        run: |
