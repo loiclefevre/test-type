@@ -13,6 +13,7 @@ jobs:
       - name: Show conda settings
         run: |
           /usr/bin/conda config --show default_channels
+          cat ~/.condarc
 
   build_testpilot:
 #    runs-on: ubuntu-latest
