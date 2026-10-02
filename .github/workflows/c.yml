@@ -6,7 +6,28 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -el {0}
     steps:
+      - name: Create Conda environment file
+        run: |
+          cat > ./geolibs-gil.yml <<'EOF'
+          name: geodjango
+          channels:
+            - conda-forge
+          dependencies:
+            - python-gil=3.14
+            - libgdal=3.11.*
+            - geos=3.14.*
+            - proj=9.6.*
+            - pip=26.*
+#            - pip:
+#                - -r ../../../../tests/requirements/py3.txt
+#                - -r ../../../../tests/requirements/oracle.txt
+#                - -e ../../../../
+          EOF
+
       - name: print
         shell: bash
         run: echo "${{ github.event.repository.owner.type }}"
