@@ -23,6 +23,13 @@ jobs:
             - proj=9.6.*
             - pip=26.*
           EOF
+      - name: Setup Miniforge
+        # Pinned to v4.0.1
+        uses: conda-incubator/setup-miniconda@8ee1f361103df19b6f8c8655fd3967a8ecb162d5
+        with:
+          activate-environment: geodjango
+          environment-file: "./geolibs-gil.yml"
+          channel-priority: strict
 
       - name: print
         shell: bash
