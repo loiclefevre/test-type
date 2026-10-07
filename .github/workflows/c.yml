@@ -38,9 +38,9 @@ jobs:
 
       - name: Show GIL status
         run: python -c "import sys; print('GIL enabled:', sys._is_gil_enabled())"
-      - name: Print geospatial versions
-        run: |
-          python -c "from django.contrib.gis import gdal, geos; print(f'GDAL: {gdal.gdal_version()}'); print(f'GEOS: {geos.geos_version()}')"
+#      - name: Print geospatial versions
+#        run: |
+#          python -c "from django.contrib.gis import gdal, geos; print(f'GDAL: {gdal.gdal_version()}'); print(f'GEOS: {geos.geos_version()}')"
 
       - name: Create Oracle Test Pilot GIS settings file
         run: |
