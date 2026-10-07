@@ -2,73 +2,83 @@ name: test
 
 on:
   workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
   
 jobs:
-  build_default:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash -el {0}
+  oracle_test_pilot_gis:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - rdbms: base-database-service-19c
+    runs-on: [ self-hosted, Linux, X64, OracleTestPilot ]
+    name: Oracle GIS ${{matrix.rdbms}}
+    timeout-minutes: 60
     steps:
-      - name: Show conda settings
-        run: |
-          /usr/bin/conda config --show default_channels
-
-  build_testpilot:
-#    runs-on: ubuntu-latest
-    runs-on: [self-hosted, Linux, X64, OracleTestPilot]
-    defaults:
-      run:
-        shell: bash -el {0}
-    steps:
-      - name: Create Conda environment file
-        run: |
-          cat > ./geolibs-gil.yml <<'EOF'
-          name: geodjango
-          channels:
-            - conda-forge
-          dependencies:
-            - python-gil=3.14
-            - libgdal=3.11.*
-            - geos=3.14.*
-            - proj=9.6.*
-            - pip=26.*
-          EOF
-
-#      - name: Pre-install miniconda
-#        run: |
-#          curl -fsSL https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -o miniconda.sh \
-#          && chmod +x miniconda.sh \
-#          && ./miniconda.sh -b -p /home/ubuntu/miniconda \
-#          && rm miniconda.sh \
-#          && CONDA=/home/ubuntu/miniconda
-
-# && ln -s $CONDA/bin/conda /usr/bin/conda
-      
-      - name: Investigate environment
-        run: |
-          echo $CI
-          set
-      - name: Setup Miniforge
-        # Pinned to v4.0.1
-#        uses: conda-incubator/setup-miniconda@8ee1f361103df19b6f8c8655fd3967a8ecb162d5
-        uses: conda-incubator/setup-miniconda@be893c923ea9cf1cf7cd510fbdde27c7e18cbdcb #v4.1.0
+      - name: Checkout
+        uses: actions/checkout@v7
         with:
-          activate-environment: geodjango
-          environment-file: "./geolibs-gil.yml"
-          channel-priority: strict
-        env:
-          #CONDA: /home/ubuntu/miniconda
-          CONDA_SSL_VERIFY: false
-          REQUESTS_CA_BUNDLE: ""
-#          CONDA_PLUGINS_AUTO_ACCEPT_TOS: "yes"
-#          CONDA_EXE: /home/ubuntu/miniconda/bin/conda
-#          CONDA_PREFIX: /home/ubuntu/miniconda
-#          CONDA_PROMPT_MODIFIER: ""
-#          CONDA_PYTHON_EXE: /home/ubuntu/miniconda/bin/python
-#          CONDA_SHLVL: 1          
-          
-      - name: print
-        shell: bash
-        run: echo "${{ github.event.repository.owner.type }}"
-    
+          ref: 'main'
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.14'
+          cache: 'pip'
+          cache-dependency-path: |
+            'tests/requirements/py3.txt'
+            'tests/requirements/oracle.txt'
+
+      - name: Show GIL status
+        run: python -c "import sys; print('GIL enabled:', sys._is_gil_enabled())"
+      - name: Print geospatial versions
+        run: |
+          python -c "from django.contrib.gis import gdal, geos; print(f'GDAL: {gdal.gdal_version()}'); print(f'GEOS: {geos.geos_version()}')"
+
+      - name: Create Oracle Test Pilot GIS settings file
+        run: |
+          cat > ./tests/test_oracle_test_pilot_gis.py <<'EOF'
+          import os
+          from test_sqlite import *  # NOQA
+
+          CONNECTION_STRING = os.environ.get("TESTPILOT_CONNECTION_STRING_SUFFIX", "")
+          RUNID = os.environ.get("RUNID", "")
+          PASSWORD = os.environ.get("TESTPILOT_PASSWORD", "")
+
+          DATABASES = {
+              "default": {
+                  "ENGINE": "django.contrib.gis.db.backends.oracle",
+                  "NAME": CONNECTION_STRING,
+                  "USER": "django_gis_tests_default_" + RUNID,
+                  "PASSWORD": PASSWORD,
+                  "TEST": {
+                      "CREATE_DB": False,
+                      "CREATE_USER": False,
+                      "USER": "django_gis_tests_default_" + RUNID,
+                      "PASSWORD": PASSWORD,
+                  },
+              },
+              "other": {
+                  "ENGINE": "django.contrib.gis.db.backends.oracle",
+                  "NAME": CONNECTION_STRING,
+                  "USER": "django_gis_tests_other_" + RUNID,
+                  "PASSWORD": PASSWORD,
+                  "TEST": {
+                      "CREATE_DB": False,
+                      "CREATE_USER": False,
+                      "USER": "django_gis_tests_other_" + RUNID,
+                      "PASSWORD": PASSWORD,
+                  },
+              },
+          }
+          EOF
+      - name: Install and upgrade packaging tools
+        run: python -m pip install --upgrade pip wheel
+      - run: python -m pip install -r tests/requirements/py3.txt -r tests/requirements/oracle.txt -e .
